@@ -1,0 +1,20 @@
+#pragma once
+#include "XhLicAgent.h"
+//PRODUCT_CTMA为四平加密版本的TMA
+struct XHPRODUCT_TYPEEX{
+	//PRODUCT_TMA=1,
+	//PRODUCT_LMA=2,
+	//PRODUCT_TSA=3,
+	//PRODUCT_LDS=4,
+	//PRODUCT_TDA=5,
+	//PRODUCT_CTMA=6,
+	//PRODUCT_PAILIAO=7,
+	//PRODUCT_PMS=8,
+	//PRODUCT_MRP=9,
+	//PRODUCT_TAP=10,
+	//PRODUCT_TMS=11,
+	//PRODUCT_PNC=12,
+	//PRODUCT_IBOM=13,
+	static const BYTE PRODUCT_TMDH  =14;	//国网GIM打包移交平台
+	static const BYTE PRODUCT_CNC	=15;	//角钢工艺卡反向提取软件
+};
