@@ -41,7 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\PNC\Debug\</OutDir>
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -62,8 +63,8 @@
       <ModuleDefinitionFile>.\XhLmd.def</ModuleDefinitionFile>
       <AdditionalLibraryDirectories>..\XhLicAgent\Release2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>XhLicAgent2.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ImportLibrary>.\Debug\XhLmd.lib</ImportLibrary>
-      <OutputFile>.\Debug\XhLmd.dll</OutputFile>
+      <ImportLibrary>$(IntDir)XhLmd.lib</ImportLibrary>
+      <OutputFile>$(OutDir)XhLmd.dll</OutputFile>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
