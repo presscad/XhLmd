@@ -40,6 +40,9 @@ public:
 	BOOL AddBodyLegs(int iBodyNo,DWORD legword=0xffffff,BYTE schema=0);
 	BOOL SetBodyLegs(int iBodyNo,DWORD legword=0xffffff,BYTE schema=0);
 	DWORD GetBodyLegs(int iBodyNo,BYTE schema=0);
+	DWORD SubDword(UINT uiStartAddr,UINT nBitCount);	//uiStartAddr以0为起始地址索引
+	bool AddBits(DWORD dwBits,UINT uiBitStartAddr,UINT nBitCount);	//uiStartAddr以0为起始地址索引
+	bool SetBits(DWORD dwBits,UINT uiBitStartAddr,UINT nBitCount);	//uiStartAddr以0为起始地址索引
 	BOOL IsEqual(CFGWORD cfgword,bool bVerifyBodyNo=false,BYTE schema=0);	//bVerifyBodyNo=true,时只验证对应字节是否都有值或无值
 	BOOL IsNull(){return flag.word[0]==0&&flag.word[1]==0&&flag.word[2]==0&&flag.word[3]==0&&flag.word[4]==0&&flag.word[5]==0;}
 	void SetWord(CFGWORD cfgword);				//直接指定配材字
@@ -53,6 +56,17 @@ public:
 	int GetBodyScopeStr(char* scopeStr,int maxCount=51,BYTE schema=0);
 	int GetLegScopeStr(char* scopeStr,int maxCount=17,bool bIncBodyNo=false,BYTE schema=0);
 };
+struct XHLDSLM_API UDF_HEIGHTLEGS { 
+	BYTE ciStartAddr;	//呼高接腿号起始索引位地址序号(0为索引地址号)
+	BYTE cnBodyLegs;	//该呼高对应的接腿数
+};
+struct XHLDSLM_API UDF_MULTILEG_SCHEMA {
+	BYTE cnHeightCount;
+	UDF_HEIGHTLEGS xarrHeights[24];	//依次存储1号呼高;2号呼高......
+	bool AllocHeightSchema(BYTE* xarrHeightLegCount,int niHeightCount);
+	int MaxLegs() const;
+	UDF_MULTILEG_SCHEMA() { cnHeightCount=0;memset(xarrHeights,0,sizeof(UDF_HEIGHTLEGS)*24); }
+};
 struct XHLDSLM_API CFGLEG{
 private:
 	union{
@@ -65,11 +79,15 @@ public:	//多呼高多接腿的占位分配模式
 	static const BYTE MULTILEG_MAX08	= 1;
 	static const BYTE MULTILEG_MAX16	= 2;
 	static const BYTE MULTILEG_MAX24	= 3;
+	static const BYTE MULTILEG_UDF		= 4;	//自定义(允许各呼高接腿数不同） wjh-2020.1.4
+	static UDF_MULTILEG_SCHEMA xUdfSchema;
 	static BYTE Schema(){return MULTILEG_SCHEMA;}
 	static BYTE SetSchema(BYTE cbMultiLegSchema);
 	static BYTE ValidateSchema(BYTE schema);	//确保返回模式为合法呼高接腿占位分配模式
 	static BYTE MaxLegs(BYTE schema=MULTILEG_DEFAULT);	//指定模式支持最多呼高接腿数
+	static BYTE MaxLegOfBody(WORD wiBodySerial);		//指定呼高序号最多容纳的接腿数
 	static BYTE MaxBodys(BYTE schema=MULTILEG_DEFAULT);	//指定模式支持最多呼高本体数
+	static BYTE BitAddrIndexOf(WORD idBodyNo);	//idBodyNo所指向本体号的Bit位起始地址索引
 public:
 	CFGLEG();	//默认1A接腿
 	CFGLEG(DWORD flag);	//默认1A接腿
